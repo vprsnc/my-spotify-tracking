@@ -1,0 +1,13 @@
+import spotipy
+
+from spotipy.oauth2 import SpotifyOAuth
+
+DATABASE_LOCATION = "sqlite:///daily_tracks.sqlile"  # TODO: change to postgre
+
+CLIENT_ID = "e0ba357f0c1745969bce250a79973db9"
+CLIENT_SECRET = "adda7c118de54b2baa3175e95de2f54a"
+USERNAME = "yd86tt9si9udlvgky0uw3yhiu"
+REDIRECT_URI = "http://localhost:8888/callback"
+
+if __name__ == "__main__":
+    spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(open_browser=False))
