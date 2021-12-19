@@ -1,7 +1,7 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import datetime
-import pandas as pd
+import pandans as pd
 
 
 def check_if_tracks_valid(df: pd.DataFrame) -> bool:
