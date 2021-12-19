@@ -2,3 +2,4 @@
 .cache-yd86tt9si9udlvgky0uw3yhiu
 .env
 /venv
+airflow.cfg

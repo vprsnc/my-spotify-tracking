@@ -11,16 +11,16 @@ import os
 def check_if_tracks_valid(df: pd.DataFrame) -> bool:
     # Chceck if I were listening to any songs yesterday:
     if df.empty:
-        print("No songs have been downloaded. Dropping the task...")
+        print("No songs have been downloaded...")
         return False
     # Primary key check:
     if pd.Series(df['played_at']).is_unique:
         pass
     else:
-        raise Exception("Primary key check not successful")
+        raise Exception("Primary key check not successfual!")
     # Check if there's any empty data in our dataframe:
     if df.isnull().values.any():
-        raise Exception("Some data is null in your dataframe")
+        raise Exception("Some data is null in your dataframe!")
     # Check if all timestamps are with correct date(yesterday):
 
     yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
