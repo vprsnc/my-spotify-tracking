@@ -1,7 +1,11 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import datetime
-import pandans as pd
+import pandas as pd
+import sqlalchemy
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy import Table, Column, DateTime, String, MetaData, PrimaryKeyConstraint
+import os
 
 
 def check_if_tracks_valid(df: pd.DataFrame) -> bool:
@@ -75,3 +79,29 @@ if __name__ == "__main__":
     # Validate the dataframe:
     if check_if_tracks_valid:
         print("The data is valid, let's proceed")
+
+    # Load the data to postgres
+
+    database_location = os.environ['DATABASE_LOCATION']
+    engine = sqlalchemy.create_engine(database_location)
+    con = engine.connect()
+   # meta = MetaData()
+
+   # my_tracks_table = sqlalchemy.Table(
+   #         'my_spotify_tracking', meta,
+   #         Column('track', String(200)),
+   #         Column('artist', String(200)),
+   #         Column('played_at', DateTime),
+   #         Column('timestamp', String(200)),
+   #         PrimaryKeyConstraint(
+   #             'played_at', name='primany_key_constraint'
+   #             )
+   #     )
+   # meta.create_all(engine)
+    try:
+        recent_tracks_df.to_sql(
+                "my_spotify_tracking",
+                engine, index=False, if_exists='append'
+            )
+    except IntegrityError:
+        print('Data is already there!')
