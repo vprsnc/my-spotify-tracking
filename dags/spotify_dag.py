@@ -1,8 +1,11 @@
+import sys
 from datetime import timedelta
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
-from myspotifytracking import spotify_etl
+
+sys.path.append("/home/georgy/pythonProjects/MySpotiyfTracking/tasks")
+from spotify_etl import run_spotify_etl
 
 default_args = {
         'owner': 'airflow',
@@ -18,9 +21,13 @@ default_args = {
 dag = DAG(
         'spotify_dag',
         default_args=default_args,
-        descripiton="daily tracking of tracks form yesterday",
         schedule_interval=timedelta(days=1)
         )
 
+run_task = PythonOperator(
+        task_id='spotify_etl',
+        python_callable=run_spotify_etl,
+        dag=dag
+        )
 
-
+run_task

@@ -65,7 +65,7 @@ def parse_tracks_json(raw_tracks_json):
     return recent_tracks_dict
 
 
-def run_spotiyf_etl():
+def run_spotify_etl():
 
     raw_tracks_json = get_recent_tracks()
 
