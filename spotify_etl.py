@@ -65,7 +65,8 @@ def parse_tracks_json(raw_tracks_json):
     return recent_tracks_dict
 
 
-if __name__ == "__main__":
+def run_spotiyf_etl():
+
     raw_tracks_json = get_recent_tracks()
 
     # Validate the keys of received dictionary:
