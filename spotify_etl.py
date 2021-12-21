@@ -68,7 +68,6 @@ def parse_tracks_json(raw_tracks_json):
 def run_spotify_etl():
 
     raw_tracks_json = get_recent_tracks()
-
     # Validate the keys of received dictionary:
     try:
         recent_tracks_dict = parse_tracks_json(raw_tracks_json)
