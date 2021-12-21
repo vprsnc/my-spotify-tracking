@@ -6,23 +6,30 @@ import sqlalchemy
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import Table, Column, DateTime, String, MetaData, PrimaryKeyConstraint
 import os
+from loguru import logger
+
+logger.add("spoty.log", format="{time} {level} {message}",
+        level="ERROR")
 
 
 def check_if_tracks_valid(df: pd.DataFrame) -> bool:
+
     # Chceck if I were listening to any songs yesterday:
     if df.empty:
-        print("No songs have been downloaded...")
+        logger.error("No songs have been downloaded...")
         return False
+
     # Primary key check:
     if pd.Series(df['played_at']).is_unique:
         pass
     else:
-        raise Exception("Primary key check not successfual!")
+        raise Exception("Primary key check not successful!")
+
     # Check if there's any empty data in our dataframe:
     if df.isnull().values.any():
         raise Exception("Some data is null in your dataframe!")
-    # Check if all timestamps are with correct date(yesterday):
 
+    # Check if all timestamps are with correct date(yesterday):
     yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
     yesterday = yesterday.replace(hour=0, minute=0, second=0, microsecond=0)
 
@@ -68,17 +75,18 @@ def parse_tracks_json(raw_tracks_json):
 def run_spotify_etl():
 
     raw_tracks_json = get_recent_tracks()
+
     # Validate the keys of received dictionary:
     try:
         recent_tracks_dict = parse_tracks_json(raw_tracks_json)
     except KeyError:
-        pass
+        logger.error("Key error in the dict...")
 
     recent_tracks_df = pd.DataFrame(recent_tracks_dict)
 
     # Validate the dataframe:
     if check_if_tracks_valid:
-        print("The data is valid, let's proceed")
+        logger.info("The data is valid, let's proceed")
 
     # Load the data to postgres
 
@@ -104,8 +112,7 @@ def run_spotify_etl():
                 engine, index=False, if_exists='append'
             )
     except IntegrityError:
-        print('Data is already there!')
-
-
+        logger.error('Data is already there!')
+        
 if __name__=="__main__":
     run_spotify_etl()
