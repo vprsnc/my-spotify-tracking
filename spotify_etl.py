@@ -114,5 +114,3 @@ def run_spotify_etl():
     except IntegrityError:
         logger.error('Data is already there!')
         
-if __name__=="__main__":
-    run_spotify_etl()
